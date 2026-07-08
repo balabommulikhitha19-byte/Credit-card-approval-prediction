@@ -1,25 +1,19 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
+import joblib
 from sklearn.ensemble import RandomForestClassifier
 
-# Sample dataset (you can replace with real dataset later)
-data = pd.DataFrame({
-    'income': [50000, 20000, 80000, 30000, 60000, 40000, 70000, 25000],
-    'age': [25, 45, 30, 50, 35, 28, 40, 55],
-    'approved': [1, 0, 1, 0, 1, 1, 1, 0]
-})
+# Load dataset
+data = pd.read_csv("dataset.csv")
 
-# Features and target
-X = data[['income', 'age']]
-y = data['approved']
+# Features and Target
+X = data[["income", "age"]]
+y = data["approved"]
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Train Model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X, y)
 
-# Model training
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
+# Save Model
+joblib.dump(model, "model.pkl")
 
-# Prediction function
-def predict_approval(income, age):
-    return model.predict([[income, age]])
+print("Model trained successfully!")
